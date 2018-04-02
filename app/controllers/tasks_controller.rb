@@ -1,10 +1,10 @@
 class TasksController < ApplicationController
+  before_action :all_tasks, only: [:index, :create]
   before_action :set_task, only: [:show, :edit, :update, :destroy]
 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all
   end
 
   # GET /tasks/1
@@ -24,17 +24,7 @@ class TasksController < ApplicationController
   # POST /tasks
   # POST /tasks.json
   def create
-    @task = Task.new(task_params)
-
-    respond_to do |format|
-      if @task.save
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
-        format.json { render :show, status: :created, location: @task }
-      else
-        format.html { render :new }
-        format.json { render json: @task.errors, status: :unprocessable_entity }
-      end
-    end
+    @task  = Task.create(task_params)
   end
 
   # PATCH/PUT /tasks/1
@@ -62,13 +52,18 @@ class TasksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_task
-      @task = Task.find(params[:id])
-    end
+  # ¡Nueva acción!
+  def all_tasks
+    @tasks = Task.all
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def task_params
-      params.require(:task).permit(:description, :deadline)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_task
+  @task = Task.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def task_params
+  params.require(:task).permit(:description, :deadline)
+  end
 end
